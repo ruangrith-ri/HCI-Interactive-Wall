@@ -4,8 +4,8 @@ byte destination_Ip[] = {192,168,1,255};        //Broadcast
 //byte destination_Ip[] = {255,255,255,255};    //Broadcast All
 unsigned int localPort = 6454;
 
-const int DMX_Universe = 0;
-const int number_of_channels = 512;
+const int DMX_Universe = 3;
+const int number_of_channels = 720;
 
 byte mac[] = {144, 162, 218, 00, 16, 96};
 byte ip[] = {192, 168, 1, 116};
@@ -65,25 +65,25 @@ void construct_arnet_packet(){
     ArtDmxBuffer[i] = ArtNetHead[i];
   }
   
-  //Operator code low byte first
+  //Operator Code low byte first
   ArtDmxBuffer[8] = OpOutput;
   ArtDmxBuffer[9] = OpOutput >> 8;
 
-  //protocole
+  //Protocole
   ArtDmxBuffer[10] = 0;
   ArtDmxBuffer[11] = 14;
 
-  //sequence
+  //Sequence
   ArtDmxBuffer[12] = 0;
 
-  //physical
+  //Physical
   ArtDmxBuffer[13] = 0;
 
-  //universe
+  //Universe
   ArtDmxBuffer[14] = DMX_Universe; //or 0
   ArtDmxBuffer[15] = DMX_Universe >> 8;
 
-  //data length
+  //Data length
   ArtDmxBuffer[16] = number_of_channels >> 8;
   ArtDmxBuffer[17] = number_of_channels;
 

@@ -2,13 +2,10 @@
 
 #include "lds.h"
 
-#define FRAMERATE 40
+#define FRAMERATE 5
 #define FRAMERATE_INTERVAL 1000/FRAMERATE
 
 lds_scan_t lds_scan;
-
-unsigned long previousTime = 0;
-
 
 /////////////////////////////////////////////////////////////////////////////Ethernet stuff
 
@@ -41,8 +38,6 @@ void setup() {
 
   Serial2.print("b");
   Serial.println("LIDAR On");
-
-  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
@@ -54,21 +49,7 @@ void loop() {
     if (ldsUpdate(&lds_scan, Serial2.read()) == true) {
       mapData();
       sendArtnet();
-      digitalWrite(LED_BUILTIN, 1);
     }
-  }
-  digitalWrite(LED_BUILTIN, 0);
-
-  static uint32_t pre_time;
-  if (millis() - pre_time >= 50) {
-    pre_time = millis();
-
-    Serial.print(lds_scan.data[270].range);
-    Serial.print(" ");
-    Serial.print(lds_scan.data[270].intensity);
-    Serial.print(" ");
-    Serial.print(lds_scan.scan_time);
-    Serial.println(" ");
   }
 }
 
@@ -88,3 +69,11 @@ void sendArtnet() {
   artnet.send(universe1, data1, size);
   artnet.send(universe2, data2, size);
 }
+
+//void intervalTask() {
+//  static uint32_t previousTime;
+//  if (millis() - previousTime >= FRAMERATE_INTERVAL) {
+//    previousTime = millis();
+//    sendArtnet();
+//  }
+//}

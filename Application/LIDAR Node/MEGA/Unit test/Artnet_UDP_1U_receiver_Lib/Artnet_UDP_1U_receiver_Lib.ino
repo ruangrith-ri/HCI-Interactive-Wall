@@ -12,7 +12,7 @@ void callback(uint8_t* data, uint16_t size){
   Serial.print("artnet data (universe : ");
   Serial.print(universe1);
   Serial.println(") = ");
-  for (size_t i = 0; i < size; ++i){
+  for (size_t i = 0; i < 1; ++i){
     Serial.print(data[i]); Serial.print(",");
   }
   Serial.println();
