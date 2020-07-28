@@ -3,7 +3,7 @@ package testReadArtnet;
 import ch.bildspur.artnet.ArtNetClient;
 import processing.core.PApplet;
 
-import static application.util.UtilityDMX.byteToShort;
+import static application.service.util.UtilityDMX.byteToShort;
 import static application.style.FontStyle.FontStyle;
 import static application.style.FontStyle.nexaBL;
 

@@ -7,7 +7,8 @@ public class ArtNetService {
 
     private static ArtNetClient artnet;
 
-    public static TouchNodeReceiver touchNode = new TouchNodeReceiver();
+    public static TouchNodeService touchNode = new TouchNodeService();
+    public static LIDARNodeService lidarNode = new LIDARNodeService();
 
     public static ArtNetClient getClient() {
         return artnet;
@@ -19,5 +20,8 @@ public class ArtNetService {
 
         Thread t = new Thread(touchNode);
         t.start();
+
+        Thread l = new Thread(lidarNode);
+        l.start();
     }
 }

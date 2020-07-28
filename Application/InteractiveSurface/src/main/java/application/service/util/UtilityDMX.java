@@ -1,4 +1,4 @@
-package application.util;
+package application.service.util;
 
 public class UtilityDMX {
     public static short byteToShort(byte dmxByte) {
