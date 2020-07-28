@@ -1,10 +1,14 @@
-package application;
+package application.applet;
 
 import application.sketch.TriggerLIDAR;
+import application.sketch.VisualizationLIDAR;
+
 import jto.processing.sketch.mapper.SketchMapper;
+
 import processing.core.PApplet;
 
-public class Processing extends PApplet {
+public class ProjectionApplet extends PApplet {
+
     public static PApplet processing;
 
     private SketchMapper sketchMapper;
@@ -24,6 +28,7 @@ public class Processing extends PApplet {
 
         sketchMapper = new SketchMapper(this);
         sketchMapper.addSketch(new TriggerLIDAR(this, width / 2, height / 2));
+        sketchMapper.addSketch(new VisualizationLIDAR(this, width / 2, height / 2));
     }
 
     @Override
