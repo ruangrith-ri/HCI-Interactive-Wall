@@ -21,11 +21,9 @@ public class EyeRobotLIDAR extends AbstractSketch {
     public void draw() {
         graphics.beginDraw();
         graphics.background(255);
-        graphics.fill(0);
+        graphics.fill(255);
 
-        for (int i = 0; i < 100; i++) {
-            graphics.ellipse(parent.random(graphics.width), parent.random(graphics.height), 25, 25);
-        }
+
 
         graphics.endDraw();
     }

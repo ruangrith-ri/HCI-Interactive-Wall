@@ -22,9 +22,6 @@ public class TriggerLIDAR extends AbstractSketch {
         graphics.background(255);
         graphics.fill(0);
 
-        for (int i = 0; i < 100; i++) {
-            graphics.ellipse(parent.random(graphics.width), parent.random(graphics.height), 25, 25);
-        }
 
         graphics.endDraw();
     }

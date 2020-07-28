@@ -1,5 +1,6 @@
 package application.applet;
 
+import application.sketch.EyeRobotLIDAR;
 import application.sketch.TriggerLIDAR;
 import application.sketch.VisualizationLIDAR;
 
@@ -13,13 +14,21 @@ public class ProjectionApplet extends PApplet {
 
     private SketchMapper sketchMapper;
 
+    static int widthSketch = 0;
+    static int heightSketch = 0;
+
     public static void main(String[] args){
         PApplet.main("MainClass", args);
     }
 
+    public static void setSizeSketch(int width, int height){
+        widthSketch = width;
+        heightSketch = height;
+    }
+
     @Override
     public void settings() {
-        size(600, 600, P3D);
+        size(widthSketch, heightSketch, P3D);
     }
 
     @Override
@@ -27,8 +36,10 @@ public class ProjectionApplet extends PApplet {
         processing = this;
 
         sketchMapper = new SketchMapper(this);
-        sketchMapper.addSketch(new TriggerLIDAR(this, width / 2, height / 2));
-        sketchMapper.addSketch(new VisualizationLIDAR(this, width / 2, height / 2));
+
+        //sketchMapper.addSketch(new TriggerLIDAR(this, width / 2, height / 2));
+        sketchMapper.addSketch(new VisualizationLIDAR(this, 600, 600));
+        //sketchMapper.addSketch(new EyeRobotLIDAR(this, width / 2, height / 2));
     }
 
     @Override

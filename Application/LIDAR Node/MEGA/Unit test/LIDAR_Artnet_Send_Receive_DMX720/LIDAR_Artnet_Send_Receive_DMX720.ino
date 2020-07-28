@@ -31,14 +31,22 @@ void lds_command(int d) {
     Serial2.write("b");
     ldsOn = true;
     lastReciveDataTime = millis();
-      Serial.println("LIDAR On2");
+    Serial.println("LIDAR On2");
   } else if (lastCommand > command) {
     Serial2.write("e");
     ldsOn = false;
     Serial.println("LIDAR Off2");
-    
+
     clearData();
     sendData();
+  } else if (!command) {
+    static uint32_t previousTime2;
+
+    if (millis() - previousTime2 >= 200) {
+      previousTime2 = millis();
+      clearData();
+      sendData();
+    }
   }
 
   lastCommand = command;
@@ -49,7 +57,7 @@ void lds_command(int d) {
 
 void setup() {
   Ethernet.begin(mac, ip);
-  
+
   udp_begin();
 
   //Serial.begin(115200);

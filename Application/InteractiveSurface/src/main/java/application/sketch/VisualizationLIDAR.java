@@ -1,9 +1,12 @@
 package application.sketch;
 
+import application.animation.Circle;
 import jto.processing.sketch.mapper.AbstractSketch;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
+
+import static application.applet.NodeControllerApplet.radar;
 
 public class VisualizationLIDAR extends AbstractSketch {
 
@@ -19,11 +22,11 @@ public class VisualizationLIDAR extends AbstractSketch {
     @Override
     public void draw() {
         graphics.beginDraw();
-        graphics.background(255,0,0);
-        graphics.fill(0);
+        graphics.background(0);
+        graphics.translate(300,300);
 
-        for (int i = 0; i < 100; i++) {
-            graphics.ellipse(parent.random(graphics.width), parent.random(graphics.height), 25, 25);
+        for (Circle r : radar) {
+            r.draw(graphics);
         }
 
         graphics.endDraw();
