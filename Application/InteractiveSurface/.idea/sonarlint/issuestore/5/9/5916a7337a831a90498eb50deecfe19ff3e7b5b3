@@ -1,9 +1,0 @@
-
-L
-java:S2696"6Make the enclosing method "static" or remove this set.(úÂøé
-K
-java:S1444"0Make this "public static processing" field final(ºœöĞûÿÿÿÿ
-4
-java:S1700"Rename field "processing"(ºœöĞûÿÿÿÿ
-q
-java:S1104"VMake processing a static final constant or non-public and provide accessors if needed.(ºœöĞûÿÿÿÿ
