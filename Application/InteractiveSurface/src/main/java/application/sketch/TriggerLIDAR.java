@@ -23,7 +23,7 @@ public class TriggerLIDAR extends AbstractSketch {
     int[] phaseIndex = {10, 45, 300, 127, 255};
     int waveResolution = 2;
     float theta = 0;
-    float amplitude = 100;
+    float amplitude = 25;
     float period = 7000;
 
     int waveWidth;
@@ -56,11 +56,11 @@ public class TriggerLIDAR extends AbstractSketch {
 
         animationControl();
 
-        graphics.strokeWeight(5);
+        graphics.strokeWeight(3);
         graphics.noFill();
 
         for (int j = 0; j < 5; j++) {
-            graphics.stroke(255/* * parent.noise((float) (j / 1.0)), 255 - 255 * parent.noise((float) (j / 1.0)), 255*/);
+            graphics.stroke(255* parent.noise((float) (j / 1.0)), 255 - 255 * parent.noise((float) (j / 1.0)), 255);
 
             renderWave(phaseIndex[j]);
         }
