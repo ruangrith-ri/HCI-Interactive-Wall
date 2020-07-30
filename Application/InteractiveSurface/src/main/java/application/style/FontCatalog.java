@@ -3,7 +3,7 @@ package application.style;
 import processing.core.PApplet;
 import processing.core.PFont;
 
-public class FontStyle {
+public class FontCatalog {
 
     public static PFont nexaL;
     public static PFont nexaLL;

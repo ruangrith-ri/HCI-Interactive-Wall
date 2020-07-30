@@ -4,24 +4,32 @@ import application.sketch.EyeRobotLIDAR;
 import application.sketch.TriggerLIDAR;
 import application.sketch.VisualizationLIDAR;
 
+import ixagon.surface.mapper.SurfaceMapper;
 import jto.processing.sketch.mapper.SketchMapper;
 
 import processing.core.PApplet;
+
+import java.util.Objects;
+
+import static application.applet.helper.SketchMapperHelper.getSurfaceMapper;
 
 public class ProjectionApplet extends PApplet {
 
     public static PApplet processing;
 
     private SketchMapper sketchMapper;
+    private SurfaceMapper sm;
+
+    boolean render = false;
 
     static int widthSketch = 0;
     static int heightSketch = 0;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         PApplet.main("MainClass", args);
     }
 
-    public static void setSizeSketch(int width, int height){
+    public static void setSizeSketch(int width, int height) {
         widthSketch = width;
         heightSketch = height;
     }
@@ -34,16 +42,26 @@ public class ProjectionApplet extends PApplet {
     @Override
     public void setup() {
         processing = this;
+        blendMode(ADD);
 
-        sketchMapper = new SketchMapper(this);
+        frameRate(60);
 
-        //sketchMapper.addSketch(new TriggerLIDAR(this, width / 2, height / 2));
-        sketchMapper.addSketch(new VisualizationLIDAR(this, 600, 600));
-        //sketchMapper.addSketch(new EyeRobotLIDAR(this, width / 2, height / 2));
+        sketchMapper = new SketchMapper(this, "lidarNodeMapper.xml");
+
+        sm = Objects.requireNonNull(getSurfaceMapper(this.sketchMapper));
+
+        sketchMapper.addSketch(new VisualizationLIDAR(this, 700, 700));
+        sketchMapper.addSketch(new EyeRobotLIDAR(this, 500, 500));
+        sketchMapper.addSketch(new TriggerLIDAR(this, 1300, 300));
     }
 
     @Override
     public void draw() {
         sketchMapper.draw();
+
+        if (!render){
+            sm.toggleCalibration();
+            render = true;
+        }
     }
 }

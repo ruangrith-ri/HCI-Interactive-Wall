@@ -4,8 +4,8 @@ import ch.bildspur.artnet.ArtNetClient;
 import processing.core.PApplet;
 
 import static application.service.util.UtilityDMX.byteToShort;
-import static application.style.FontStyle.FontStyle;
-import static application.style.FontStyle.nexaBL;
+import static application.style.FontCatalog.FontStyle;
+import static application.style.FontCatalog.nexaBL;
 
 public class NodeControllerApplet extends PApplet {
 

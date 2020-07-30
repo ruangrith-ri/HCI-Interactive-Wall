@@ -25,7 +25,7 @@ void setup() {
   frameRate(40);
   textAlign(LEFT, CENTER);
   ellipseMode(CENTER);
-  textSize(20);
+  //textSize(20);
 
   artnet = new ArtNetClient(new ArtNetBuffer(), 6454, 6454);
   artnet.start();

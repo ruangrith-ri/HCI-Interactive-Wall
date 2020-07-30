@@ -39,7 +39,7 @@ public class LIDARNodeService implements Runnable {
 
                 int value = firstData | secondData << 8;
 
-                distance[i] = value <= 3500 ? value : 0;
+                distance[i] = value <= 3500 && value >= 120 ? value : (i > 0 ? distance[i - 1] : 120);
             } catch (Exception ignore) {
             }
         }

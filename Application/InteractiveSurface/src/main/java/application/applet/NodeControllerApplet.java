@@ -6,18 +6,55 @@ import application.service.ProjectionDevice;
 
 import de.looksgood.ani.Ani;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 import java.awt.*;
 
 import static application.service.ArtNetService.lidarNode;
 import static application.service.ArtNetService.touchNode;
-import static application.style.FontStyle.*;
+import static application.style.FontCatalog.*;
 
 public class NodeControllerApplet extends PApplet {
 
-    public static PApplet processing;
+    public class X {
+        Ani diameterAnimation;
 
-    public static Circle[] radar = new Circle[6];
+        int diameter = 0;
+        int target, time;
+
+        public X(float d, float t) {
+            target = (int) d;
+            time = (int) t;
+        }
+
+        public void start() {
+            diameterAnimation = Ani.to(this, time, "diameter", target, Ani.ELASTIC_OUT);
+        }
+
+        public void end() {
+            diameterAnimation.reverse();
+            diameterAnimation.start();
+        }
+
+        public void draw(PGraphics graphic) {
+            graphic.pushMatrix();
+            graphic.pushStyle();
+
+            graphic.noFill();
+            graphic.strokeWeight(1);
+            graphic.stroke(128);
+            graphic.ellipse(0, 0, diameter, diameter);
+
+            graphic.fill(constrain(diameter * 5, 0, 255));
+            graphic.text(target / 2 + " cm", 0, - (diameter / 2));
+
+            graphic.popStyle();
+            graphic.popMatrix();
+        }
+    } ///Ball
+
+    public static PApplet processing;
+    public Circle[] radar = new Circle[6];
 
     @Override
     public void settings() {
@@ -116,14 +153,14 @@ public class NodeControllerApplet extends PApplet {
                 mouseY >= y && mouseY <= y + height);
     }
 
-    final long lidarAnimationTime = 30 * 1000;
-    long lastLIDARPlay = 0;
+    static final long LIDAR_ANIMATION_TIME = 60 * 1000;
+    static long lastLIDARPlay = 0;
 
     boolean lidarIsPlay = false;
 
     private void playLidar(boolean command) {
 
-        if (timerAnimationLIDAR() < 1) {
+        if (timerMillisAnimationLIDAR() < 1) {
             if (command) {
                 lidarNode.setLidarOn(true);
                 lastLIDARPlay = System.currentTimeMillis();
@@ -146,8 +183,12 @@ public class NodeControllerApplet extends PApplet {
         }
     }
 
-    private long timerAnimationLIDAR() {
-        return (long) constrain(lidarAnimationTime - (System.currentTimeMillis() - lastLIDARPlay), 0, lidarAnimationTime);
+    public static long timerMillisAnimationLIDAR() {
+        return (long) constrain(LIDAR_ANIMATION_TIME - (System.currentTimeMillis() - lastLIDARPlay), 0, LIDAR_ANIMATION_TIME);
+    }
+
+    public static long timeMillisAnimationLIDAR() {
+        return (long) constrain((System.currentTimeMillis() - lastLIDARPlay), 0, LIDAR_ANIMATION_TIME);
     }
 
     private void lidarNodeStatusDraw() {
@@ -170,7 +211,7 @@ public class NodeControllerApplet extends PApplet {
 
         textFont(nexaL);
         textAlign(LEFT, BOTTOM);
-        
+
         translate(0, 80);
         translate(400, 350);
 
@@ -192,7 +233,8 @@ public class NodeControllerApplet extends PApplet {
             pushMatrix();
 
             rotate(radians(i));
-            line(0, 0, (float) (lidarNode.getDistance(i) / 10.0), 0);
+            int reverse = (int) map(i,0,359,359,0);
+            line(12, 0, (float) (lidarNode.getDistance(reverse) / 10.0), 0);
 
             popMatrix();
         }
@@ -214,13 +256,13 @@ public class NodeControllerApplet extends PApplet {
 
         fill(0, 255, 0, 40);
 
-        int bar = (int) map(timerAnimationLIDAR(), 0, lidarAnimationTime, 0, 590);
+        int bar = (int) map(timerMillisAnimationLIDAR(), 0, LIDAR_ANIMATION_TIME, 0, 590);
         rect(0, 0, bar, 50, constrain(bar - 585, 0, 5));
 
         fill(255);
 
         if (lidarNode.getLidarOn()) {
-            text(String.valueOf(timerAnimationLIDAR() / 1000.0), 260, 25);
+            text(String.valueOf(timerMillisAnimationLIDAR() / 1000.0), 260, 25);
             fill(0, 255, 0);
         } else {
             text("Off LIDAR Node", 220, 25);
