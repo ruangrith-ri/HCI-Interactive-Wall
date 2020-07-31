@@ -25,14 +25,17 @@ public class Circle {
 
     public void start() {
         diameterAnimation = Ani.to(this, time, "diameter", target, Ani.ELASTIC_OUT);
+        //diameter = target;
     }
 
     public void start(int delay) {
         diameterAnimation = Ani.to(this, time,delay, "diameter", target, Ani.ELASTIC_OUT);
+        //diameter = target;
     }
 
     public void end() {
-        diameterAnimation = Ani.to(this, time, "diameter", 0, Ani.ELASTIC_OUT);
+       diameterAnimation = Ani.to(this, time, "diameter", 0, Ani.ELASTIC_OUT);
+        //diameter = 0;
     }
 
     public void draw(PGraphics graphic) {

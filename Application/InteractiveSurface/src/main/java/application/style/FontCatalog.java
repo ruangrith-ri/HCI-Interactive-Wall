@@ -16,6 +16,6 @@ public class FontCatalog {
         nexaLL = parent.createFont("font/NexaDemo-Light.otf", 22);
         nexaB = parent.createFont("font/NexaDemo-Bold.otf", 12);
         nexaBL = parent.createFont("font/NexaDemo-Bold.otf", 18);
-        nexaBLL = parent.createFont("font/NexaDemo-Bold.otf", 26);
+        nexaBLL = parent.createFont("font/NexaDemo-Bold.otf", 40);
     }
 }

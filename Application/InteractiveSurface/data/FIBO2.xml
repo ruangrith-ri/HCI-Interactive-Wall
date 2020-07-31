@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProjectionMap>
+  <surface horizontalForce="0" id="0" lock="false" name="0" res="6" sketch="VisualizationLIDAR" type="0" verticalForce="0">
+    <cornerpoint i="0" x="522.0" y="441.0"/>
+    <cornerpoint i="1" x="929.0" y="468.0"/>
+    <cornerpoint i="2" x="927.0" y="702.0"/>
+    <cornerpoint i="3" x="246.0" y="611.0"/>
+  </surface>
+  <surface horizontalForce="0" id="2" lock="false" name="2" res="10" sketch="TriggerLIDAR" type="1" verticalForce="0">
+    <cornerpoint i="0" x="496.0" y="653.0"/>
+    <cornerpoint i="1" x="743.0" y="688.0"/>
+    <cornerpoint i="2" x="733.0" y="714.0"/>
+    <cornerpoint i="3" x="492.0" y="677.0"/>
+    <bezierpoint i="0" x="495.0" y="683.0"/>
+    <bezierpoint i="1" x="524.0" y="651.0"/>
+    <bezierpoint i="2" x="675.0" y="683.0"/>
+    <bezierpoint i="3" x="733.0" y="730.0"/>
+    <bezierpoint i="4" x="732.0" y="694.0"/>
+    <bezierpoint i="5" x="710.0" y="718.0"/>
+    <bezierpoint i="6" x="519.0" y="691.0"/>
+    <bezierpoint i="7" x="503.0" y="653.0"/>
+  </surface>
+  <surface horizontalForce="0" id="1" lock="false" name="1" res="6" sketch="EyeRobotLIDAR" type="0" verticalForce="0">
+    <cornerpoint i="0" x="363.0" y="599.0"/>
+    <cornerpoint i="1" x="390.0" y="588.0"/>
+    <cornerpoint i="2" x="419.0" y="594.0"/>
+    <cornerpoint i="3" x="384.0" y="623.0"/>
+  </surface>
+</ProjectionMap>

@@ -2,24 +2,19 @@ package application.sketch;
 
 import application.animation.Circle;
 import application.animation.Snake;
-import application.applet.NodeControllerApplet;
 import de.looksgood.ani.Ani;
 import de.looksgood.ani.AniConstants;
 import jto.processing.sketch.mapper.AbstractSketch;
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 import java.math.BigDecimal;
 
-import static application.applet.NodeControllerApplet.timeMillisAnimationLIDAR;
-import static application.applet.NodeControllerApplet.timerMillisAnimationLIDAR;
+import static application.applet.NodeControllerApplet.*;
 import static application.service.ArtNetService.lidarNode;
 import static application.style.FontCatalog.*;
 
-import static processing.core.PApplet.*;
-import static processing.core.PConstants.*;
 
 public class VisualizationLIDAR extends AbstractSketch {
 
@@ -63,24 +58,25 @@ public class VisualizationLIDAR extends AbstractSketch {
             r.draw(graphics);
         }
 
+
         graphics.strokeWeight(1);
         graphics.stroke(0, radarLineColor, 0, 100);
 
-        if (!dp) {
+        graphics.pushMatrix();
+
+        graphics.rotate(radians(-4));
+        for (int i = 0; i < 360; i++) {
             graphics.pushMatrix();
 
-            graphics.rotate(radians(-4));
-            for (int i = 0; i < 360; i++) {
-                graphics.pushMatrix();
+            graphics.rotate(radians(i));
+            int reverse = (int) map(i, 0, 359, 359, 0);
+            graphics.line(60, 0, lidarNode.getDistance(reverse) / 2, 0);
 
-                graphics.rotate(radians(i));
-                int reverse = (int) map(i, 0, 359, 359, 0);
-                graphics.line(60, 0, lidarNode.getDistance(reverse) / 2, 0);
-
-                graphics.popMatrix();
-            }
             graphics.popMatrix();
         }
+        graphics.popMatrix();
+
+
         drawText();
         drawPing();
 
@@ -98,7 +94,7 @@ public class VisualizationLIDAR extends AbstractSketch {
 
         graphics.text("This is LIDAR", -100, -120);
 
-        graphics.translate(0, 80);
+        graphics.translate(0, 50);
 
         graphics.textFont(nexaBL);
         graphics.text("LIDAR is ToF Category Sensor", -100, 50);
@@ -106,19 +102,25 @@ public class VisualizationLIDAR extends AbstractSketch {
         graphics.textFont(nexaLL);
         graphics.text("ToF : Time-of-Flight", -100, 75);
 
-        graphics.textFont(nexaL);
-        graphics.text("We can find distance to the object using the equation", -100, 100);
-        graphics.text("d = (c x t) / 2", -100, 130);
-        graphics.text("light travel at the speed : c = 299,792,458 m/s", -100, 160);
+        graphics.pushStyle();
+
+        graphics.textFont(nexaLL);
+        graphics.textAlign(LEFT, TOP);
 
         BigDecimal bd = BigDecimal.valueOf((lidarNode.getDistance(0) / 1000f) * 2.0 / 299792458.0);
         bd = bd.setScale(9, BigDecimal.ROUND_UP);
         double r = bd.doubleValue();
 
-        graphics.text("time of light travel (Green Ball Reflect) : t = " + r, -100, 180);
+        graphics.text("TimeFlight = " + r, -100, 140);
 
-        graphics.text("d = " + "(299,792,458 x " + r + ") / 2", -100, 220);
-        graphics.text("d = " + lidarNode.getDistance(0) / 1000f + " m", -100, 240);
+        graphics.text("LightSpeed = 299,792,458 m/s", -100, 160);
+
+        graphics.text("Distance = (LightSpeed x TimeFlight) / 2", -100, 200);
+
+        graphics.textFont(nexaBLL);
+        graphics.text("Distance = " + lidarNode.getDistance(0) / 1000f + " m", -100, 240);
+
+        graphics.popStyle();
 
         graphics.popMatrix();
     }
@@ -159,53 +161,95 @@ public class VisualizationLIDAR extends AbstractSketch {
                 directionPing[i] = 0;
             }
 
-            Ani.to(this, 2, 4, "textColor", 255, AniConstants.EXPO_OUT);
+            Ani.to(this, 2, "textColor", 255, AniConstants.EXPO_OUT);
             rotatePing = 0;
             textColor = 0;
             speedPing = 5;
-            tc = true;
 
-            Ani.to(this, 2, 6, "diameterPing", 20, AniConstants.BOUNCE_OUT);
-            radarLineColor = 0;
-            dp = true;
+            Ani.to(this, 2, "diameterPing", 20, AniConstants.BOUNCE_OUT);
+            radarLineColor = 0; //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
             lidarIsPlay = true;
         } else if ((!lidarNode.getLidarOn()) && lidarIsPlay) {
+
+            Ani.to(this, 2, "diameterPing", 0, AniConstants.BOUNCE_OUT);
+            Ani.to(this, 1, "textColor", 0, AniConstants.EXPO_OUT);
+            Ani.to(this, 2, "diameterPing2", 0, AniConstants.BOUNCE_OUT);
+            Ani.to(this, 1, "radarLineColor", 0, AniConstants.LINEAR);
 
             for (Circle r : radar) {
                 r.end();
             }
             lidarIsPlay = false;
+
         } else if (lidarIsPlay) {
 
-            if (timeMillisAnimationLIDAR() / 1000 > 30 && tc) {
-                Ani.to(this, 1, "textColor", 0, AniConstants.EXPO_OUT);
-                Ani.to(this, 2, 1, "diameterPing2", 20, AniConstants.BOUNCE_OUT);
+            if (scene == 0 && (0 != lastScene)) {
+                Ani.to(this, 2, "diameterPing", 20, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 1, "textColor", 255, AniConstants.EXPO_OUT);
+                Ani.to(this, 2, "diameterPing2", 0, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 1, "radarLineColor", 0, AniConstants.LINEAR);
 
-                tc = false;
+                System.out.println(lastScene + " " + scene + "Change to " + 0);
+
+//                diameterPing = 20;
+//                diameterPing2 = 0;
+//                textColor = 255;
+//                radarLineColor = 0;
+
+                lastScene = scene;
+
+                for (Circle r : radar) {
+                    r.end();
+                }
             }
 
-            if (timeMillisAnimationLIDAR() / 1000 > 40 && dp) {
-                Ani.to(this, 1, "diameterPing", 0, AniConstants.BOUNCE_OUT);
+            if (scene == 1 && (1 != lastScene)) {
+                Ani.to(this, 1, "textColor", 0, AniConstants.EXPO_OUT);
+                Ani.to(this, 2, "diameterPing", 20, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 2, "diameterPing2", 20, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 1, "radarLineColor", 0, AniConstants.LINEAR);
+
+                System.out.println(lastScene + " " + scene + "Change to " + 1);
+
+//                diameterPing = 20;
+//                diameterPing2 = 20;
+//                textColor = 0;
+//                radarLineColor = 0;
+
+                lastScene = scene;
+
+                for (Circle r : radar) {
+                    r.end();
+                }
+            }
+
+            if (scene == 2 && (2 != lastScene)) {
+                Ani.to(this, 1, "textColor", 0, AniConstants.EXPO_OUT);
                 Ani.to(this, 1, "diameterPing2", 0, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 1, "diameterPing", 0, AniConstants.BOUNCE_OUT);
                 Ani.to(this, 1, "radarLineColor", 255, AniConstants.LINEAR);
+
+                System.out.println(lastScene + " " + scene + "Change to " + 2);
+
+//                diameterPing = 0;
+//                diameterPing2 = 0;
+//                textColor = 0;
+//                radarLineColor = 255;
+
+                lastScene = scene;
 
                 for (Circle r : radar) {
                     r.start();
                 }
-
-                dp = false;
             }
 
             long time = System.currentTimeMillis();
             long deltaTime = time - lastTime;
+            lastTime = time;
 
-//            if (timeMillisAnimationLIDAR() / 1000 > 30) {
-//                rotatePing += (360f / 10f / 1000f * deltaTime * ((30000-timerMillisAnimationLIDAR()) / 5000f));
-//            }
 
             for (int i = 0; i < 16; i++) {
-
 
                 if (pingX[i] >= lidarNode.getDistance(constrain(i * 22 - 1, 0, 359)) / 2) {
                     directionPing[i] = -1;
@@ -215,10 +259,6 @@ public class VisualizationLIDAR extends AbstractSketch {
                 pingX[i] += (deltaTime / speedPing) * directionPing[i];
 
             }
-
-            // System.out.println(pingX + "  -  " + (deltaTime / speedPing) * directionPing + "  -  " + directionPing + " " +  speedPing + " " + deltaTime);
-
-            lastTime = time;
         }
     }
 

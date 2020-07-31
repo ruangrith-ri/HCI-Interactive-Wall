@@ -46,7 +46,7 @@ public class NodeControllerApplet extends PApplet {
             graphic.ellipse(0, 0, diameter, diameter);
 
             graphic.fill(constrain(diameter * 5, 0, 255));
-            graphic.text(target / 2 + " cm", 0, - (diameter / 2));
+            graphic.text(target / 2 + " cm", 0, -(diameter / 2));
 
             graphic.popStyle();
             graphic.popMatrix();
@@ -94,7 +94,11 @@ public class NodeControllerApplet extends PApplet {
 
         projectionSelectDraw();
 
-        playLidar(touchNode.getElectrodeTouch(0));
+        playLidar(touchNode.getElectrodeTouch());
+
+        //touchNode.getElectrodeTouch(5);
+
+        touchNode.getElectrodeTouch(11);
 
         textFont(nexaBL);
         touchNodeStatusDraw();
@@ -153,15 +157,18 @@ public class NodeControllerApplet extends PApplet {
                 mouseY >= y && mouseY <= y + height);
     }
 
-    static final long LIDAR_ANIMATION_TIME = 60 * 1000;
+    static final long LIDAR_ANIMATION_TIME = 300 * 1000;
     static long lastLIDARPlay = 0;
 
     boolean lidarIsPlay = false;
 
-    private void playLidar(boolean command) {
+    public static int scene = 0;
+    public static int lastScene = 0;
+
+    private void playLidar(boolean[] command) {
 
         if (timerMillisAnimationLIDAR() < 1) {
-            if (command) {
+            if (command[0]) {
                 lidarNode.setLidarOn(true);
                 lastLIDARPlay = System.currentTimeMillis();
 
@@ -170,6 +177,29 @@ public class NodeControllerApplet extends PApplet {
                 }
 
                 lidarIsPlay = true;
+                scene = 0;
+
+            } else if (command[5]) {
+                lidarNode.setLidarOn(true);
+                lastLIDARPlay = System.currentTimeMillis();
+
+                for (Circle r : radar) {
+                    r.start();
+                }
+
+                lidarIsPlay = true;
+                scene = 1;
+
+            } else if (command[11]) {
+                lidarNode.setLidarOn(true);
+                lastLIDARPlay = System.currentTimeMillis();
+
+                for (Circle r : radar) {
+                    r.start();
+                }
+
+                lidarIsPlay = true;
+                scene = 2;
 
             } else if (lidarIsPlay) {
                 lidarNode.setLidarOn(false);
@@ -179,6 +209,21 @@ public class NodeControllerApplet extends PApplet {
                 }
 
                 lidarIsPlay = false;
+            }
+        } else if (lidarIsPlay){
+            if (command[0] && (lastScene != 0)) {
+                scene = 0;
+
+                System.out.println(lastScene + " " + scene);
+
+            } else if (command[5] && (lastScene != 1)) {
+                scene = 1;
+
+                System.out.println(lastScene + " " + scene);
+            } else if (command[11]&& (lastScene != 2)) {
+                scene = 2;
+
+                System.out.println(lastScene + " " + scene);
             }
         }
     }
@@ -233,7 +278,7 @@ public class NodeControllerApplet extends PApplet {
             pushMatrix();
 
             rotate(radians(i));
-            int reverse = (int) map(i,0,359,359,0);
+            int reverse = (int) map(i, 0, 359, 359, 0);
             line(12, 0, (float) (lidarNode.getDistance(reverse) / 10.0), 0);
 
             popMatrix();
