@@ -50,8 +50,8 @@ public class ProjectionApplet extends PApplet {
 
         sm = Objects.requireNonNull(getSurfaceMapper(this.sketchMapper));
 
-        sketchMapper.addSketch(new VisualizationLIDAR(this, 700, 700));
-        sketchMapper.addSketch(new EyeRobotLIDAR(this, 500, 500));
+        sketchMapper.addSketch(new VisualizationLIDAR(this, 600, 600));
+        sketchMapper.addSketch(new EyeRobotLIDAR(this, 300, 1200));
         sketchMapper.addSketch(new TriggerLIDAR(this, 1300, 300));
     }
 

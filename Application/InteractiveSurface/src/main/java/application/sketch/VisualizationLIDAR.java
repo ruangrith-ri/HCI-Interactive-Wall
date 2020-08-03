@@ -9,7 +9,7 @@ import processing.core.PApplet;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-import java.math.BigDecimal;
+import java.text.NumberFormat;
 
 import static application.applet.NodeControllerApplet.*;
 import static application.service.ArtNetService.lidarNode;
@@ -49,9 +49,11 @@ public class VisualizationLIDAR extends AbstractSketch {
     @Override
     public void draw() {
         graphics.beginDraw();
-        graphics.background(0);
-        graphics.translate(350, 350);
 
+        graphics.background(0);
+
+        graphics.translate(300, 300);
+        graphics.rotate(radians(270));
         animationControl();
 
         for (Circle r : radar) {
@@ -68,9 +70,9 @@ public class VisualizationLIDAR extends AbstractSketch {
         for (int i = 0; i < 360; i++) {
             graphics.pushMatrix();
 
-            graphics.rotate(radians(i));
-            int reverse = (int) map(i, 0, 359, 359, 0);
-            graphics.line(60, 0, lidarNode.getDistance(reverse) / 2, 0);
+            //int reverse = (int) map(i, 0, 359, 359, 0);
+            graphics.rotate(radians(359-i));
+            graphics.line(60, 0, lidarNode.getDistance(i) / 2, 0);
 
             graphics.popMatrix();
         }
@@ -86,42 +88,31 @@ public class VisualizationLIDAR extends AbstractSketch {
 
     private void drawText() {
         graphics.pushMatrix();
+        graphics.pushStyle();
 
         graphics.fill(textColor);
 
-        graphics.textAlign(LEFT, CENTER);
+        graphics.textAlign(CENTER, CENTER);
         graphics.textFont(nexaBLL);
 
-        graphics.text("This is LIDAR", -100, -120);
+        graphics.text("This is LIDAR", 0, -120);
 
-        graphics.translate(0, 50);
+        graphics.translate(0, 0);
 
-        graphics.textFont(nexaBL);
-        graphics.text("LIDAR is ToF Category Sensor", -100, 50);
-
-        graphics.textFont(nexaLL);
-        graphics.text("ToF : Time-of-Flight", -100, 75);
-
-        graphics.pushStyle();
-
-        graphics.textFont(nexaLL);
+        graphics.textFont(nexaBL2);
         graphics.textAlign(LEFT, TOP);
 
-        BigDecimal bd = BigDecimal.valueOf((lidarNode.getDistance(0) / 1000f) * 2.0 / 299792458.0);
-        bd = bd.setScale(9, BigDecimal.ROUND_UP);
-        double r = bd.doubleValue();
+        graphics.text("LIDAR is ToF (Time-of-Flight) Sensor", -250, 50);
 
-        graphics.text("TimeFlight = " + r, -100, 140);
+        NumberFormat formatter =  NumberFormat.getInstance();
+        formatter.setMinimumFractionDigits(2);
 
-        graphics.text("LightSpeed = 299,792,458 m/s", -100, 160);
 
-        graphics.text("Distance = (LightSpeed x TimeFlight) / 2", -100, 200);
-
+        graphics.text("TimeFlight  =  " + formatter.format((lidarNode.getDistance(0) / 1000f) * 2.0 / 299792458.0 *1000000000)+ "  Nano Second", -250, 115);
         graphics.textFont(nexaBLL);
-        graphics.text("Distance = " + lidarNode.getDistance(0) / 1000f + " m", -100, 240);
+        graphics.text("Distance  =  " + lidarNode.getDistance(0) / 1000f + "  Meter", -250, 150);
 
         graphics.popStyle();
-
         graphics.popMatrix();
     }
 
@@ -153,21 +144,66 @@ public class VisualizationLIDAR extends AbstractSketch {
     public void animationControl() {
         if (lidarNode.getLidarOn() && (!lidarIsPlay)) {
             lastTime = System.currentTimeMillis();
-            diameterPing = 0;
-            diameterPing2 = 0;
 
-            for (int i = 0; i < 16; i++) {
-                pingX[i] = 0;
-                directionPing[i] = 0;
+            if (scene == 0 && (0 != lastScene)) {
+                Ani.to(this, 2, "diameterPing", 20, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 1, "textColor", 255, AniConstants.EXPO_OUT);
+                Ani.to(this, 2, "diameterPing2", 0, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 1, "radarLineColor", 0, AniConstants.LINEAR);
+
+                System.out.println(lastScene + " " + scene + "Change to " + 0);
+
+//                diameterPing = 20;
+//                diameterPing2 = 0;
+//                textColor = 255;
+//                radarLineColor = 0;
+
+                lastScene = scene;
+
+                for (Circle r : radar) {
+                    r.end();
+                }
             }
 
-            Ani.to(this, 2, "textColor", 255, AniConstants.EXPO_OUT);
-            rotatePing = 0;
-            textColor = 0;
-            speedPing = 5;
+            if (scene == 1 && (1 != lastScene)) {
+                Ani.to(this, 1, "textColor", 0, AniConstants.EXPO_OUT);
+                Ani.to(this, 2, "diameterPing", 20, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 2, "diameterPing2", 20, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 1, "radarLineColor", 0, AniConstants.LINEAR);
 
-            Ani.to(this, 2, "diameterPing", 20, AniConstants.BOUNCE_OUT);
-            radarLineColor = 0; //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                System.out.println(lastScene + " " + scene + "Change to " + 1);
+
+//                diameterPing = 20;
+//                diameterPing2 = 20;
+//                textColor = 0;
+//                radarLineColor = 0;
+
+                lastScene = scene;
+
+                for (Circle r : radar) {
+                    r.end();
+                }
+            }
+
+            if (scene == 2 && (2 != lastScene)) {
+                Ani.to(this, 1, "textColor", 0, AniConstants.EXPO_OUT);
+                Ani.to(this, 1, "diameterPing2", 0, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 1, "diameterPing", 0, AniConstants.BOUNCE_OUT);
+                Ani.to(this, 1, "radarLineColor", 255, AniConstants.LINEAR);
+
+                System.out.println(lastScene + " " + scene + "Change to " + 2);
+
+//                diameterPing = 0;
+//                diameterPing2 = 0;
+//                textColor = 0;
+//                radarLineColor = 255;
+
+                lastScene = scene;
+
+                for (Circle r : radar) {
+                    r.start();
+                }
+            }
 
             lidarIsPlay = true;
         } else if ((!lidarNode.getLidarOn()) && lidarIsPlay) {

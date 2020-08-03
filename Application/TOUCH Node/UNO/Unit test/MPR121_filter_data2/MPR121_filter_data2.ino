@@ -23,7 +23,7 @@ void setup() {
 void loop() {
   //Serial.print("Filt: \t");
   for (uint8_t i = 0; i < 12; i++) {
-    Serial.print(getTouchFilter(i));
+    Serial.print(/*getTouchFilter(i)*/cap.filteredData(i));
     Serial.print(" ");
   }
   Serial.println();

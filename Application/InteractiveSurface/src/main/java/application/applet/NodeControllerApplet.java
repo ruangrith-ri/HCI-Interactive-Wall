@@ -213,17 +213,10 @@ public class NodeControllerApplet extends PApplet {
         } else if (lidarIsPlay){
             if (command[0] && (lastScene != 0)) {
                 scene = 0;
-
-                System.out.println(lastScene + " " + scene);
-
             } else if (command[5] && (lastScene != 1)) {
                 scene = 1;
-
-                System.out.println(lastScene + " " + scene);
             } else if (command[11]&& (lastScene != 2)) {
                 scene = 2;
-
-                System.out.println(lastScene + " " + scene);
             }
         }
     }
@@ -277,9 +270,9 @@ public class NodeControllerApplet extends PApplet {
         for (int i = 0; i < 360; i++) {
             pushMatrix();
 
-            rotate(radians(i));
-            int reverse = (int) map(i, 0, 359, 359, 0);
-            line(12, 0, (float) (lidarNode.getDistance(reverse) / 10.0), 0);
+            //int reverse = (int) map(i, 0, 359, 359, 0);
+            rotate(radians(359-i));
+            line(12, 0, (float) (lidarNode.getDistance(i) / 10.0), 0);
 
             popMatrix();
         }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProjectionMap>
+    <surface horizontalForce="0" id="0" lock="false" name="0" res="18" sketch="VisualizationLIDAR" type="0" verticalForce="0">
+        <cornerpoint i="0" x="634.0" y="208.0"/>
+        <cornerpoint i="1" x="1273.0" y="180.0"/>
+        <cornerpoint i="2" x="1921.0" y="850.0"/>
+        <cornerpoint i="3" x="8.0" y="992.0"/>
+    </surface>
+    <surface horizontalForce="0" id="1" lock="false" name="1" res="6" sketch="EyeRobotLIDAR" type="0" verticalForce="0">
+        <cornerpoint i="0" x="1445.0" y="502.0"/>
+        <cornerpoint i="1" x="1515.0" y="500.0"/>
+        <cornerpoint i="2" x="1738.0" y="756.0"/>
+        <cornerpoint i="3" x="1651.0" y="764.0"/>
+    </surface>
+</ProjectionMap>

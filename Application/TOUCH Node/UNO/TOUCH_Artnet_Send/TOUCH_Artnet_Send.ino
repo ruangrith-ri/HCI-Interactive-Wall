@@ -48,5 +48,5 @@ void mapTouchData() {
 }
 
 bool getTouchFilter(uint8_t electrode) {
-  return MPR121.filteredData(electrode) > 240 ? false : true;
+  return MPR121.filteredData(electrode) > 150 ? false : true;
 }
